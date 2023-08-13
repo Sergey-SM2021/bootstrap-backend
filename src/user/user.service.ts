@@ -19,7 +19,14 @@ export class UserService {
     return await this.usersRepository
       .createQueryBuilder()
       .where('id = :id', { id })
-      .getMany();
+      .getOne();
+  }
+
+  async getUserByLogin(login: string) {
+    return await this.usersRepository
+      .createQueryBuilder()
+      .where('login = :login', { login })
+      .getOne();
   }
 
   async createUsers(UserContent: CreateUserDTO) {

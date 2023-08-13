@@ -29,6 +29,12 @@ export class UserController {
     return this.userService.getUserById(id);
   }
 
+  @ApiOperation({ summary: 'get user by id' })
+  @Get('/:login')
+  getUserLogin(@Param('login') login: string) {
+    return this.userService.getUserByLogin(login);
+  }
+
   @ApiOperation({ summary: 'create user' })
   @Post('/')
   createUser(@Body(new ValidationPipe()) body: CreateUserDTO) {
