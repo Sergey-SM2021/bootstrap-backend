@@ -10,7 +10,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     private usersService: UserService,
     private jwtService: JwtService,
   ) {
-    super();
+    super({
+      usernameField: 'login',
+      passwordField: 'password',
+    });
   }
 
   async validate(username: string, password: string) {
