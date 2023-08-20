@@ -37,7 +37,8 @@ export class CommentService {
   async getCommentsByArticleId(articleId: number) {
     return this.commentRepository
       .createQueryBuilder()
-      .where('id = :id', { id: articleId })
+      .where('Comment.id = :id', { id: articleId })
+      .leftJoinAndSelect('Comment.user', 'user')
       .getMany();
   }
 }

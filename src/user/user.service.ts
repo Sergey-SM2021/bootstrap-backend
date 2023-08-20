@@ -46,4 +46,16 @@ export class UserService {
   async removeUsers() {
     return this.usersRepository.createQueryBuilder().delete().execute();
   }
+
+  async update(id: number, user: CreateUserDTO) {
+    await this.usersRepository
+      .createQueryBuilder()
+      .where('id = :id', { id })
+      .update(user)
+      .execute();
+    return await this.usersRepository
+      .createQueryBuilder()
+      .where('id = :id', { id })
+      .getOne();
+  }
 }

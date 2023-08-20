@@ -43,6 +43,6 @@ export class ArticleService {
       .createQueryBuilder()
       .where('id = :id', { id })
       .getOne();
-    return { article, blocks };
+    return { ...article, blocks };
   }
 }

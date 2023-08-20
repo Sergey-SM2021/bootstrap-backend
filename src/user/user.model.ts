@@ -25,4 +25,6 @@ export class User {
   currency: string;
   @Column()
   nickname: string;
+  @Column({ nullable: true })
+  lastname: string;
 }

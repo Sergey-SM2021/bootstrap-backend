@@ -6,6 +6,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
@@ -52,5 +53,14 @@ export class UserController {
   @Delete('/')
   remuveUser() {
     return this.userService.removeUsers();
+  }
+
+  @ApiOperation({ summary: 'update user' })
+  @Put('/:id')
+  updateUser(
+    @Body(ValidationPipe) user: CreateUserDTO,
+    @Param('id', ParseIntPipe) id: number,
+  ) {
+    return this.userService.update(id, user);
   }
 }
