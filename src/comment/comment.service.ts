@@ -14,14 +14,14 @@ export class CommentService {
     @InjectRepository(Article) private ArticleRepository: Repository<Article>,
   ) {}
 
-  async createComment(comment: CommentDTO) {
+  async createComment(comment: CommentDTO, userId: number) {
     const article = await this.ArticleRepository.createQueryBuilder()
       .where('id = :id', { id: comment.articleId })
       .getOne();
 
     const user = await this.userRepository
       .createQueryBuilder()
-      .where('id = :id', { id: comment.userId })
+      .where('id = :id', { id: userId })
       .getOne();
 
     const newComment = await this.commentRepository
@@ -38,6 +38,7 @@ export class CommentService {
     return this.commentRepository.find({
       relations: {
         article: true,
+        user: true,
       },
       where: {
         article: {

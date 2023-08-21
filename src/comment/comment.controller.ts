@@ -6,9 +6,12 @@ import {
   Post,
   ValidationPipe,
   Param,
+  UseGuards,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
+import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 
 @ApiTags('comment')
 @Controller('comment')
@@ -17,8 +20,9 @@ export class CommentController {
 
   @ApiOperation({ summary: 'create Comment' })
   @Post()
-  async createComment(@Body(ValidationPipe) comment: CommentDTO) {
-    return await this.commentService.createComment(comment);
+  @UseGuards(JwtAuthGuard)
+  async createComment(@Body(ValidationPipe) comment: CommentDTO, @Req() req) {
+    return await this.commentService.createComment(comment, req.user.id);
   }
 
   @ApiOperation({ summary: 'get Comments By Article Id' })
