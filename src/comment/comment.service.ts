@@ -34,11 +34,16 @@ export class CommentService {
     return newComment;
   }
 
-  async getCommentsByArticleId(articleId: number) {
-    return this.commentRepository
-      .createQueryBuilder()
-      .where('Comment.id = :id', { id: articleId })
-      .leftJoinAndSelect('Comment.user', 'user')
-      .getMany();
+  async getCommentsByArticleId(articleId: string) {
+    return this.commentRepository.find({
+      relations: {
+        article: true,
+      },
+      where: {
+        article: {
+          id: articleId,
+        },
+      },
+    });
   }
 }

@@ -6,7 +6,6 @@ import {
   Post,
   ValidationPipe,
   Param,
-  ParseIntPipe,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CommentService } from './comment.service';
@@ -24,7 +23,7 @@ export class CommentController {
 
   @ApiOperation({ summary: 'get Comments By Article Id' })
   @Get(':id')
-  async getCommentsByArticleId(@Param('id', ParseIntPipe) id: number) {
-    return await this.commentService.getCommentsByArticleId(id);
+  async getCommentsByArticleId(@Param('id') id: string) {
+    return await this.commentService.getCommentsByArticleId(id.toString());
   }
 }
