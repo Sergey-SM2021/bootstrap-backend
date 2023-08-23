@@ -24,12 +24,11 @@ export class CommentService {
       .where('id = :id', { id: userId })
       .getOne();
 
-    const newComment = await this.commentRepository
-      .createQueryBuilder()
-      .insert()
-      .into(Comment)
-      .values({ ...comment, user, article })
-      .execute();
+    const newCommentTamplate = new Comment();
+    newCommentTamplate.user = user;
+    newCommentTamplate.text = comment.text;
+    newCommentTamplate.article = article;
+    const newComment = await this.commentRepository.save(newCommentTamplate);
 
     return newComment;
   }
