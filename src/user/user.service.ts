@@ -40,6 +40,7 @@ export class UserService {
     user.country = UserContent.country;
     user.currency = UserContent.currency;
     user.nickname = UserContent.nickname;
+    user.lastname = UserContent.lastname;
     await this.usersRepository.save(user);
   }
 
@@ -48,14 +49,7 @@ export class UserService {
   }
 
   async update(id: number, user: CreateUserDTO) {
-    await this.usersRepository
-      .createQueryBuilder()
-      .where('id = :id', { id })
-      .update(user)
-      .execute();
-    return await this.usersRepository
-      .createQueryBuilder()
-      .where('id = :id', { id })
-      .getOne();
+    const userToUpdate = await this.usersRepository.findOne({ where: { id } });
+    return await this.usersRepository.save({ ...userToUpdate, ...user });
   }
 }

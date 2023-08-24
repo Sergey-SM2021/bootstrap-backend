@@ -35,7 +35,13 @@ export class ArticleService {
   }
 
   async getArticle() {
-    return this.articleRepo.createQueryBuilder().getMany();
+    const articles = await this.articleRepo.find({
+      relations: {
+        user: true,
+      },
+    });
+
+    return articles.map((article) => ({ ...article, blocks }));
   }
 
   async getArticleById(id: number) {

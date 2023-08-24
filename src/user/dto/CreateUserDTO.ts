@@ -19,4 +19,6 @@ export class CreateUserDTO {
   currency: string;
   @IsString()
   nickname: string;
+  @IsString()
+  lastname: string;
 }
