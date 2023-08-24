@@ -5,6 +5,7 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
+import { PaginationDTO } from './dto/paginationDTO';
 
 @Injectable()
 export class ArticleService {
@@ -34,7 +35,7 @@ export class ArticleService {
       .execute();
   }
 
-  async getArticle() {
+  async getArticle(limit: number, page: number) {
     const articles = await this.articleRepo.find({
       relations: {
         user: true,

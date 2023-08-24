@@ -8,11 +8,13 @@ import {
   ParseIntPipe,
   UseGuards,
   Req,
+  Query,
 } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ArticleService } from './article.service';
 import { ArticleDTO } from './dto/article';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { PaginationDTO } from './dto/paginationDTO';
 
 @ApiTags('article')
 @Controller('article')
@@ -28,8 +30,9 @@ export class ArticleController {
 
   @ApiOperation({ summary: 'get articles' })
   @Get()
-  getArticle() {
-    return this.articleService.getArticle();
+  getArticle(@Query(new ValidationPipe()) query: PaginationDTO) {
+    const { limit, page } = query;
+    return this.articleService.getArticle(limit, page);
   }
 
   @ApiOperation({ summary: 'get article by id' })
