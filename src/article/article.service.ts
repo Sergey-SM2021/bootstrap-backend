@@ -13,10 +13,10 @@ export class ArticleService {
     @InjectRepository(User) private userRepo: Repository<User>,
   ) {}
 
-  async createArticle(article: ArticleDTO) {
+  async createArticle(article: ArticleDTO, userId: number) {
     const user = await this.userRepo
       .createQueryBuilder()
-      .where('id = :userId', { userId: article.userId })
+      .where('id = :userId', { userId })
       .getOne();
 
     await this.articleRepo
