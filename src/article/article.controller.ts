@@ -29,8 +29,8 @@ export class ArticleController {
   }
 
   @ApiOperation({ summary: 'get articles' })
-  @Get()
-  getArticle(@Query(new ValidationPipe()) query: PaginationDTO) {
+  @Get('/')
+  getArticle(@Query() query: PaginationDTO) {
     const { limit, page } = query;
     return this.articleService.getArticle(limit, page);
   }
