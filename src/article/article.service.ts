@@ -37,7 +37,7 @@ export class ArticleService {
   async getArticle(limit: number, page: number) {
     const articles = await this.articleRepo
       .createQueryBuilder()
-      .leftJoin('Article.user', 'user')
+      .leftJoinAndSelect('Article.user', 'user')
       .limit(limit)
       .offset(limit * (page - 1))
       .getMany();
