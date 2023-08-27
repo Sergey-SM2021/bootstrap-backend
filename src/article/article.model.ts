@@ -10,6 +10,8 @@ import {
 
 @Entity()
 export class Article {
+  @Column({ default: 0 })
+  likes: number;
   @Column()
   img: string;
   @Column()
