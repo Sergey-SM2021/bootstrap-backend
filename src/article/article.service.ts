@@ -34,15 +34,24 @@ export class ArticleService {
       .execute();
   }
 
-  async getArticle(limit: number, page: number) {
+  async getArticle(
+    limit: number,
+    page: number,
+    search: string,
+    strategy: 'ASC' | 'DESC',
+    sortBy: 'views' | 'likes' | 'createdAt',
+  ) {
     const articles = await this.articleRepo
       .createQueryBuilder()
       .leftJoinAndSelect('Article.user', 'user')
       .limit(limit)
       .offset(limit * (page - 1))
+      .orderBy(`Article.${sortBy}`, strategy)
       .getMany();
 
-    return articles.map((article) => ({ ...article, blocks }));
+    return articles
+      .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))
+      .map((article) => ({ ...article, blocks }));
   }
 
   async getArticleById(id: number) {

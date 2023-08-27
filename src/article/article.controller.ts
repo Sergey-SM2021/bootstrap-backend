@@ -31,8 +31,20 @@ export class ArticleController {
   @ApiOperation({ summary: 'get articles' })
   @Get('/')
   getArticle(@Query() query: PaginationDTO) {
-    const { limit, page } = query;
-    return this.articleService.getArticle(limit, page);
+    const {
+      limit,
+      page,
+      search = '',
+      strategy = 'ASC',
+      sortBy = 'createdAt',
+    } = query;
+    return this.articleService.getArticle(
+      limit,
+      page,
+      search,
+      strategy,
+      sortBy,
+    );
   }
 
   @ApiOperation({ summary: 'get article by id' })
