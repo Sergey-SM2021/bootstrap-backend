@@ -53,10 +53,10 @@ export class ArticleService {
       .map((article) => ({ ...article, blocks }));
 
     if (result.length > limit) {
-      return result.slice(0, limit);
+      return { articles: result.slice(0, limit), hasMore: true };
     }
 
-    return result;
+    return { articles: result, hasMore: false };
   }
 
   async getArticleById(id: number) {
