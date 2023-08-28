@@ -1,0 +1,16 @@
+version: '3'
+services:
+  backend:
+    build: .
+    depends_on:
+      - postgres
+    ports:
+      - '4200:4200'
+  postgres:
+    image: postgres:16beta3-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      POSTGRES_DB: 'bootstrap'
+      POSTGRES_USER: 'pgql2003'
+      POSTGRES_PASSWORD: 'pgql2003'
