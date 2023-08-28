@@ -44,14 +44,19 @@ export class ArticleService {
     const articles = await this.articleRepo
       .createQueryBuilder()
       .leftJoinAndSelect('Article.user', 'user')
-      .limit(limit)
       .offset(limit * (page - 1))
       .orderBy(`Article.${sortBy}`, strategy)
       .getMany();
 
-    return articles
+    const result = articles
       .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))
       .map((article) => ({ ...article, blocks }));
+
+    if (result.length > limit) {
+      return result.slice(0, limit);
+    }
+
+    return result;
   }
 
   async getArticleById(id: number) {
