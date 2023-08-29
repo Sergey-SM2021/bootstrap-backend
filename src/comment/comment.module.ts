@@ -4,7 +4,7 @@ import { CommentController } from './comment.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Comment } from './comment.model';
 import { User } from 'src/user/user.model';
-import { Article } from 'src/article/article.model';
+import { Article } from 'src/article/entity/article.model';
 
 @Module({
   providers: [CommentService],

@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Comment } from './comment.model';
 import { CommentDTO } from './dto/comment';
 import { User } from 'src/user/user.model';
-import { Article } from 'src/article/article.model';
+import { Article } from 'src/article/entity/article.model';
 
 @Injectable()
 export class CommentService {

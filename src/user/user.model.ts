@@ -1,4 +1,4 @@
-import { Article } from 'src/article/article.model';
+import { Article } from 'src/article/entity/article.model';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()

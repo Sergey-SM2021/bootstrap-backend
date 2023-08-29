@@ -1,23 +1,24 @@
 import { Injectable } from '@nestjs/common';
-import { Article } from './article.model';
+import { Article } from './entity/article.model';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
+import { Teg } from 'src/teg/entity/teg.model';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article) private articleRepo: Repository<Article>,
     @InjectRepository(User) private userRepo: Repository<User>,
+    @InjectRepository(Teg) private tegRepo: Repository<Teg>,
   ) {}
 
   async createArticle(article: ArticleDTO, userId: number) {
-    const user = await this.userRepo
-      .createQueryBuilder()
-      .where('id = :userId', { userId })
-      .getOne();
+    const user = await this.userRepo.findOneBy({ id: userId });
+
+    const tegs = [];
 
     await this.articleRepo
       .createQueryBuilder()
@@ -30,6 +31,7 @@ export class ArticleService {
         img: article.img,
         views: 0,
         user,
+        tegs: [],
       })
       .execute();
   }

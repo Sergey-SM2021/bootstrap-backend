@@ -15,4 +15,8 @@ export class TegService {
     teg.name = tegName;
     return await this.TegRepo.save(teg);
   }
+
+  async getTeg(tegName: string) {
+    return await this.TegRepo.findOneBy({ name: tegName });
+  }
 }

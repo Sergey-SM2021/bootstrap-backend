@@ -1,4 +1,4 @@
-import { IsString } from 'class-validator';
+import { IsArray, IsString } from 'class-validator';
 
 export class ArticleDTO {
   @IsString()
@@ -7,4 +7,7 @@ export class ArticleDTO {
   title: string;
   @IsString()
   subtitle: string;
+  @IsArray()
+  @IsString({ each: true })
+  tegs: string[];
 }
