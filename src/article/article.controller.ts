@@ -5,7 +5,6 @@ import {
   Body,
   ValidationPipe,
   Param,
-  ParseIntPipe,
   UseGuards,
   Req,
   Query,
@@ -37,7 +36,7 @@ export class ArticleController {
       search = '',
       stratagy = 'ASC',
       sortBy = 'createdAt',
-      tags = [],
+      tags,
     } = query;
     return await this.articleService.getArticle(
       limit,
@@ -45,6 +44,7 @@ export class ArticleController {
       search,
       stratagy,
       sortBy,
+      tags,
     );
   }
 

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Article } from './entity/article.model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
@@ -39,13 +39,27 @@ export class ArticleService {
     search: string,
     stratagy: 'ASC' | 'DESC',
     sortBy: 'views' | 'likes' | 'createdAt',
+    tags: string[],
   ) {
-    const articles = await this.articleRepo
-      .createQueryBuilder()
-      .leftJoinAndSelect('Article.user', 'user')
-      .offset(limit * (page - 1))
-      .orderBy(`Article.${sortBy}`, stratagy)
-      .getMany();
+    if (tags == undefined) {
+      tags = (await this.tagService.getTags()).map((tag) => tag.id);
+    }
+
+    const articles = await this.articleRepo.find({
+      relations: {
+        user: true,
+        tags: true,
+      },
+      where: {
+        tags: {
+          id: In(tags),
+        },
+      },
+      skip: limit * (page - 1),
+      order: {
+        [sortBy]: stratagy,
+      },
+    });
 
     const result = articles
       .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))
