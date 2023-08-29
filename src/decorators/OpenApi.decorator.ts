@@ -3,15 +3,15 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 export function OpenApi(
   action: string,
-  tegs: string,
+  tags: string,
   withAuth: boolean = true,
 ) {
   if (withAuth) {
     return applyDecorators(
       ApiOperation({ summary: action }),
-      ApiTags(tegs),
+      ApiTags(tags),
       ApiBearerAuth(),
     );
   }
-  return applyDecorators(ApiOperation({ summary: action }), ApiTags(tegs));
+  return applyDecorators(ApiOperation({ summary: action }), ApiTags(tags));
 }

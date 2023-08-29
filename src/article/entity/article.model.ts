@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Teg } from 'src/teg/entity/teg.model';
+import { Tag } from 'src/tag/entity/tag.model';
 
 @Entity()
 export class Article {
@@ -29,6 +29,6 @@ export class Article {
   subtitle: string;
   @PrimaryGeneratedColumn()
   id: string;
-  @ManyToOne(() => Teg)
-  tegs: Teg[];
+  @ManyToOne(() => Tag)
+  tags: Tag[];
 }

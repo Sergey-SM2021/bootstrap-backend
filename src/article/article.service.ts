@@ -5,21 +5,21 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
-import { TegService } from 'src/teg/teg.service';
+import { TagService } from 'src/tag/tag.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article) private articleRepo: Repository<Article>,
     @InjectRepository(User) private userRepo: Repository<User>,
-    private tegService: TegService,
+    private tagService: TagService,
   ) {}
 
   async createArticle(article: ArticleDTO, userId: number) {
     const user = await this.userRepo.findOneBy({ id: userId });
 
-    const tegs = await Promise.all(
-      article.tegs.map((el) => this.tegService.getTeg(el)),
+    const tags = await Promise.all(
+      article.tags.map((el) => this.tagService.getTag(el)),
     );
 
     const newArticle = new Article();
@@ -29,8 +29,7 @@ export class ArticleService {
     newArticle.img = article.img;
     newArticle.views = 0;
     newArticle.user = user;
-    newArticle.tegs = tegs;
-    console.log(newArticle);
+    newArticle.tags = tags;
     return await this.articleRepo.save(newArticle);
   }
 
@@ -38,14 +37,14 @@ export class ArticleService {
     limit: number,
     page: number,
     search: string,
-    strategy: 'ASC' | 'DESC',
+    stratagy: 'ASC' | 'DESC',
     sortBy: 'views' | 'likes' | 'createdAt',
   ) {
     const articles = await this.articleRepo
       .createQueryBuilder()
       .leftJoinAndSelect('Article.user', 'user')
       .offset(limit * (page - 1))
-      .orderBy(`Article.${sortBy}`, strategy)
+      .orderBy(`Article.${sortBy}`, stratagy)
       .getMany();
 
     const result = articles

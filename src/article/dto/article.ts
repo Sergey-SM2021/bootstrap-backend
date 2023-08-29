@@ -9,5 +9,5 @@ export class ArticleDTO {
   subtitle: string;
   @IsArray()
   @IsString({ each: true })
-  tegs: string[];
+  tags: string[];
 }

@@ -1,6 +1,6 @@
 import { IsString } from 'class-validator';
 
-export class AddTegToArticle {
+export class AddtagToArticle {
   @IsString()
-  teg: string;
+  tag: string;
 }

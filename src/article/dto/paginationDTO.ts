@@ -2,8 +2,8 @@ export class PaginationDTO {
   limit: number;
   page: number;
   // filters
-  strategy: 'ASC' | 'DESC';
+  stratagy: 'ASC' | 'DESC';
   sortBy: 'views' | 'likes' | 'createdAt';
-  tegs: string[];
+  tags: string[];
   search: string;
 }

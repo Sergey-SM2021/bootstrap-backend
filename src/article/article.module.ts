@@ -4,12 +4,12 @@ import { ArticleService } from './article.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Article } from './entity/article.model';
 import { User } from 'src/user/user.model';
-import { Teg } from 'src/teg/entity/teg.model';
-import { TegService } from 'src/teg/teg.service';
+import { Tag } from 'src/tag/entity/tag.model';
+import { TagService } from 'src/tag/tag.service';
 
 @Module({
   controllers: [ArticleController],
-  providers: [ArticleService, TegService],
-  imports: [TypeOrmModule.forFeature([Article, User, Teg])],
+  providers: [ArticleService, TagService],
+  imports: [TypeOrmModule.forFeature([Article, User, Tag])],
 })
 export class ArticleModule {}

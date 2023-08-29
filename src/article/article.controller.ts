@@ -35,15 +35,15 @@ export class ArticleController {
       limit,
       page,
       search = '',
-      strategy = 'ASC',
+      stratagy = 'ASC',
       sortBy = 'createdAt',
-      tegs = [],
+      tags = [],
     } = query;
     return await this.articleService.getArticle(
       limit,
       page,
       search,
-      strategy,
+      stratagy,
       sortBy,
     );
   }
