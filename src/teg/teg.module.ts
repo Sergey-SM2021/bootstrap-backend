@@ -8,5 +8,6 @@ import { Teg } from './entity/teg.model';
   providers: [TegService],
   controllers: [TegController],
   imports: [TypeOrmModule.forFeature([Teg])],
+  exports: [TegService],
 })
 export class TegModule {}

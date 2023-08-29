@@ -5,20 +5,22 @@ import { Repository } from 'typeorm';
 import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
-import { Teg } from 'src/teg/entity/teg.model';
+import { TegService } from 'src/teg/teg.service';
 
 @Injectable()
 export class ArticleService {
   constructor(
     @InjectRepository(Article) private articleRepo: Repository<Article>,
     @InjectRepository(User) private userRepo: Repository<User>,
-    @InjectRepository(Teg) private tegRepo: Repository<Teg>,
+    private tegService: TegService,
   ) {}
 
   async createArticle(article: ArticleDTO, userId: number) {
     const user = await this.userRepo.findOneBy({ id: userId });
 
-    const tegs = [];
+    const tegs = await Promise.all(
+      article.tegs.map((el) => this.tegService.getTeg(el)),
+    );
 
     await this.articleRepo
       .createQueryBuilder()
@@ -31,7 +33,7 @@ export class ArticleService {
         img: article.img,
         views: 0,
         user,
-        tegs: [],
+        tegs,
       })
       .execute();
   }
@@ -42,7 +44,6 @@ export class ArticleService {
     search: string,
     strategy: 'ASC' | 'DESC',
     sortBy: 'views' | 'likes' | 'createdAt',
-    tegs: string[],
   ) {
     const articles = await this.articleRepo
       .createQueryBuilder()
