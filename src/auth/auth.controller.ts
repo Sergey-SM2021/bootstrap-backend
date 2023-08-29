@@ -9,17 +9,21 @@ import {
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { CreateUserDTO } from 'src/user/dto/CreateUserDTO';
+import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @ApiOperation({ summary: 'login' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
   login(@Req() req) {
     return req.user;
   }
 
+  @ApiOperation({ summary: 'register' })
   @Post('register')
   async register(@Body(ValidationPipe) body: CreateUserDTO) {
     return this.authService.register(body);

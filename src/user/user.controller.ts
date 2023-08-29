@@ -5,57 +5,57 @@ import {
   Get,
   Param,
   ParseIntPipe,
-  Post,
   Put,
   UseGuards,
   ValidationPipe,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { CreateUserDTO } from './dto/CreateUserDTO';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import { OpenApi } from '../decorators/OpenApi.decorator';
 
-@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private userService: UserService) {}
 
-  @ApiOperation({ summary: 'get users' })
+  @OpenApi('get users', 'users')
   @UseGuards(JwtAuthGuard)
   @Get('/')
   getUsers() {
     return this.userService.getUsers();
   }
 
-  @ApiOperation({ summary: 'get user by id' })
+  @OpenApi('get user by id', 'user')
+  @UseGuards(JwtAuthGuard)
   @Get('/:id')
   getUserById(@Param('id', ParseIntPipe) id: number) {
     return this.userService.getUserById(id);
   }
 
-  @ApiOperation({ summary: 'get user by id' })
-  @Get('/:login')
-  getUserLogin(@Param('login') login: string) {
-    return this.userService.getUserByLogin(login);
-  }
+  // @ApiOperation({ summary: 'get user by login' })
+  // @Get('/:login')
+  // getUserLogin(@Param('login') login: string) {
+  //   return this.userService.getUserByLogin(login);
+  // }
 
-  @ApiOperation({ summary: 'create user' })
-  @Post('/')
-  createUser(@Body(new ValidationPipe()) body: CreateUserDTO) {
-    try {
-      return this.userService.createUsers(body);
-    } catch (error) {
-      return body;
-    }
-  }
+  // @OpenApi('create user', 'user')
+  // @Post('/')
+  // createUser(@Body(new ValidationPipe()) body: CreateUserDTO) {
+  //   try {
+  //     return this.userService.createUsers(body);
+  //   } catch (error) {
+  //     return body;
+  //   }
+  // }
 
-  @ApiOperation({ summary: 'remove user' })
+  @OpenApi('delete user', 'user', false)
   @Delete('/')
   remuveUser() {
     return this.userService.removeUsers();
   }
 
-  @ApiOperation({ summary: 'update user' })
+  // #FIXME: This can do only user owner
+  @OpenApi('update user', 'user', false)
   @Put('/:id')
   updateUser(
     @Body(ValidationPipe) user: CreateUserDTO,
