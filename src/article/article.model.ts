@@ -7,7 +7,7 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Teg } from 'src/teg/teg.model';
+import { Teg } from 'src/teg/entity/teg.model';
 
 @Entity()
 export class Article {

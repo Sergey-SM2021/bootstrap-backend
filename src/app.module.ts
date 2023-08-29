@@ -8,7 +8,7 @@ import { Article } from './article/article.model';
 import { CommentModule } from './comment/comment.module';
 import { AuthModule } from './auth/auth.module';
 import { TegModule } from './teg/teg.module';
-import { Teg } from './teg/teg.model';
+import { Teg } from './teg/entity/teg.model';
 
 @Module({
   imports: [
