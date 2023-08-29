@@ -30,22 +30,7 @@ export class ArticleController {
   @ApiOperation({ summary: 'get articles' })
   @Get('/')
   async getArticle(@Query() query: PaginationDTO) {
-    const {
-      limit,
-      page,
-      search = '',
-      stratagy = 'ASC',
-      sortBy = 'createdAt',
-      tags,
-    } = query;
-    return await this.articleService.getArticle(
-      limit,
-      page,
-      search,
-      stratagy,
-      sortBy,
-      tags,
-    );
+    return await this.articleService.getArticle(query);
   }
 
   @ApiOperation({ summary: 'get article by id' })

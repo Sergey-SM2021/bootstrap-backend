@@ -6,6 +6,7 @@ import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
 import { TagService } from 'src/tag/tag.service';
+import { PaginationDTO } from './dto/paginationDTO';
 
 @Injectable()
 export class ArticleService {
@@ -33,33 +34,52 @@ export class ArticleService {
     return await this.articleRepo.save(newArticle);
   }
 
-  async getArticle(
-    limit: number,
-    page: number,
-    search: string,
-    stratagy: 'ASC' | 'DESC',
-    sortBy: 'views' | 'likes' | 'createdAt',
-    tags: string[],
-  ) {
-    if (tags == undefined) {
-      tags = (await this.tagService.getTags()).map((tag) => tag.id);
-    }
+  async getArticle(params: PaginationDTO) {
+    const {
+      limit,
+      page,
+      search = '',
+      sortBy = 'createdAt',
+      stratagy = 'ASC',
+      tags,
+    } = params;
 
-    const articles = await this.articleRepo.find({
+    let articles;
+
+    articles = await this.articleRepo.find({
       relations: {
         user: true,
         tags: true,
-      },
-      where: {
-        tags: {
-          id: In(tags),
-        },
       },
       skip: limit * (page - 1),
       order: {
         [sortBy]: stratagy,
       },
     });
+
+    if (tags.length) {
+      const ids = await Promise.all(
+        tags
+          .split(',')
+          .map(async (el) => (await this.tagService.getTag(el)).id),
+      );
+
+      articles = await this.articleRepo.find({
+        relations: {
+          user: true,
+          tags: true,
+        },
+        where: {
+          tags: {
+            id: In(ids),
+          },
+        },
+        skip: limit * (page - 1),
+        order: {
+          [sortBy]: stratagy,
+        },
+      });
+    }
 
     const result = articles
       .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))

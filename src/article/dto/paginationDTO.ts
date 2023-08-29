@@ -3,6 +3,6 @@ export class PaginationDTO {
   page: number;
   stratagy: 'ASC' | 'DESC';
   sortBy: 'views' | 'likes' | 'createdAt';
-  tags?: string[];
+  tags?: string;
   search: string;
 }
