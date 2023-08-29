@@ -57,7 +57,7 @@ export class ArticleService {
       },
     });
 
-    if (tags.length) {
+    if (tags && tags.length) {
       const ids = await Promise.all(
         tags
           .split(',')
