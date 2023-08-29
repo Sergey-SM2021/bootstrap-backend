@@ -50,7 +50,7 @@ export class ArticleController {
 
   @ApiOperation({ summary: 'get article by id' })
   @Get(':id')
-  getArticleById(@Param('id', ParseIntPipe) id: number) {
+  getArticleById(@Param('id') id: string) {
     return this.articleService.getArticleById(id);
   }
 }

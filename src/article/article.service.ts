@@ -58,11 +58,8 @@ export class ArticleService {
     return { articles: result, hasMore: false };
   }
 
-  async getArticleById(id: number) {
-    const article = await this.articleRepo
-      .createQueryBuilder()
-      .where('id = :id', { id })
-      .getOne();
+  async getArticleById(id: string) {
+    const article = await this.articleRepo.findOne({ where: { id: id } });
     return { ...article, blocks };
   }
 }
