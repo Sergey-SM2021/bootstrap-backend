@@ -4,6 +4,6 @@ export class PaginationDTO {
   // filters
   strategy: 'ASC' | 'DESC';
   sortBy: 'views' | 'likes' | 'createdAt';
-  tegs: string;
+  tegs: string[];
   search: string;
 }

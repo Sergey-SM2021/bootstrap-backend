@@ -40,6 +40,7 @@ export class ArticleService {
     search: string,
     strategy: 'ASC' | 'DESC',
     sortBy: 'views' | 'likes' | 'createdAt',
+    tegs: string[],
   ) {
     const articles = await this.articleRepo
       .createQueryBuilder()

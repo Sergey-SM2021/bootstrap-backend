@@ -7,6 +7,8 @@ import { ArticleModule } from './article/article.module';
 import { Article } from './article/article.model';
 import { CommentModule } from './comment/comment.module';
 import { AuthModule } from './auth/auth.module';
+import { TegModule } from './teg/teg.module';
+import { Teg } from './teg/teg.model';
 
 @Module({
   imports: [
@@ -17,13 +19,14 @@ import { AuthModule } from './auth/auth.module';
       username: 'pgql2003',
       password: 'pgql2003',
       database: 'bootstrap',
-      entities: [User, Article, Comment],
+      entities: [User, Article, Comment, Teg],
       synchronize: true,
     }),
     UserModule,
     ArticleModule,
     CommentModule,
     AuthModule,
+    TegModule,
   ],
 })
 export class AppModule {}

@@ -37,6 +37,7 @@ export class ArticleController {
       search = '',
       strategy = 'ASC',
       sortBy = 'createdAt',
+      tegs = [],
     } = query;
     return await this.articleService.getArticle(
       limit,
@@ -44,6 +45,7 @@ export class ArticleController {
       search,
       strategy,
       sortBy,
+      tegs,
     );
   }
 
