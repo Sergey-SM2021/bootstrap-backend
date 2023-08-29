@@ -22,20 +22,16 @@ export class ArticleService {
       article.tegs.map((el) => this.tegService.getTeg(el)),
     );
 
-    await this.articleRepo
-      .createQueryBuilder()
-      .insert()
-      .into(Article)
-      .values({
-        title: article.title,
-        subtitle: article.subtitle,
-        createdAt: '08.10.5421',
-        img: article.img,
-        views: 0,
-        user,
-        tegs,
-      })
-      .execute();
+    const newArticle = new Article();
+    newArticle.title = article.title;
+    newArticle.subtitle = article.subtitle;
+    newArticle.createdAt = '08.10.5421';
+    newArticle.img = article.img;
+    newArticle.views = 0;
+    newArticle.user = user;
+    newArticle.tegs = tegs;
+    console.log(newArticle);
+    return await this.articleRepo.save(newArticle);
   }
 
   async getArticle(

@@ -45,7 +45,6 @@ export class ArticleController {
       search,
       strategy,
       sortBy,
-      tegs,
     );
   }
 
