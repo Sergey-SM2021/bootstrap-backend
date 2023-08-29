@@ -3,6 +3,8 @@ import { Comment } from 'src/comment/comment.model';
 import {
   Column,
   Entity,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -29,6 +31,7 @@ export class Article {
   subtitle: string;
   @PrimaryGeneratedColumn()
   id: string;
-  @ManyToOne(() => Tag)
+  @ManyToMany(() => Tag)
+  @JoinTable()
   tags: Tag[];
 }
