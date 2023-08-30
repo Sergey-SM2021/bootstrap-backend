@@ -30,7 +30,7 @@ export class ArticleController {
   @ApiOperation({ summary: 'get articles' })
   @Get('/')
   async getArticle(@Query() query: PaginationDTO) {
-    return await this.articleService.getArticle(query);
+    return await this.articleService.getArticleFilter(query);
   }
 
   @ApiOperation({ summary: 'get article by id' })

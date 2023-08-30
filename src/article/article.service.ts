@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { Article } from './entity/article.model';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { User } from 'src/user/user.model';
 import { ArticleDTO } from './dto/article';
 import { blocks } from './data/article';
@@ -34,66 +34,105 @@ export class ArticleService {
     return await this.articleRepo.save(newArticle);
   }
 
-  async getArticle(params: PaginationDTO) {
+  async getArticleById(id: string) {
+    const article = await this.articleRepo.findOne({
+      where: { id: id },
+      relations: { tags: true },
+    });
+    return { ...article, blocks };
+  }
+
+  private async getArticlesLength() {
+    return (await this.articleRepo.find()).length;
+  }
+
+  private async getArticlesIdsWichHasTags(tagsIds: string) {
+    const articlesIds = await this.articleRepo
+      .createQueryBuilder()
+      .leftJoinAndSelect('Article.user', 'user')
+      .leftJoinAndSelect('Article.tags', 'tag')
+      .where('tag.id IN (:...ids)', { ids: tagsIds.split(',') })
+      .select('Article.id')
+      .getRawMany();
+
+    const articlesIdsList = await articlesIds
+      .map((el) => el.Article_id)
+      .reduce((prev: number[], current: number) => {
+        if (prev.includes(current)) {
+          return prev;
+        }
+        return [...prev, current];
+      }, []);
+
+    return articlesIdsList;
+  }
+
+  async getArticleFilter(params: PaginationDTO) {
     const {
-      limit,
-      page,
-      search = '',
+      limit = 10,
+      page = 1,
       sortBy = 'createdAt',
       stratagy = 'ASC',
+      search = '',
       tags,
     } = params;
 
-    let articles;
-
-    articles = await this.articleRepo.find({
-      relations: {
-        user: true,
-        tags: true,
-      },
-      skip: limit * (page - 1),
-      order: {
-        [sortBy]: stratagy,
-      },
-    });
-
     if (tags && tags.length) {
-      const ids = await Promise.all(
-        tags
-          .split(',')
-          .map(async (el) => (await this.tagService.getTag(el)).id),
-      );
+      const articlesIDs = await this.getArticlesIdsWichHasTags(tags);
 
-      articles = await this.articleRepo.find({
-        relations: {
-          user: true,
-          tags: true,
-        },
-        where: {
-          tags: {
-            id: In(ids),
-          },
-        },
-        skip: limit * (page - 1),
-        order: {
-          [sortBy]: stratagy,
-        },
-      });
+      const articles = await this.articleRepo
+        .createQueryBuilder()
+        .leftJoinAndSelect('Article.user', 'user')
+        .leftJoinAndSelect('Article.tags', 'tags')
+        .where('Article.id IN (:...articlesIDs)', { articlesIDs })
+        .orderBy(`Article.${sortBy}`, stratagy)
+        .take(limit)
+        .skip((page - 1) * limit)
+        .getMany();
+
+      return {
+        articles: articles
+          .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))
+          .map((article) => ({ ...article, blocks })),
+        length: await this.getArticlesLength(),
+        hasMore:
+          (
+            await this.articleRepo
+              .createQueryBuilder()
+              .leftJoinAndSelect('Article.user', 'user')
+              .leftJoinAndSelect('Article.tags', 'tags')
+              .where('Article.id IN (:...articlesIDs)', { articlesIDs })
+              .orderBy(`Article.${sortBy}`, stratagy)
+              .getMany()
+          ).length >
+          page * limit,
+      };
+    } else {
+      const articles = await this.articleRepo
+        .createQueryBuilder()
+        .leftJoinAndSelect('Article.user', 'user')
+        .leftJoinAndSelect('Article.tags', 'tags')
+        .orderBy(`Article.${sortBy}`, stratagy)
+        .take(limit)
+        .skip((page - 1) * limit)
+        .getMany();
+
+      return {
+        articles: articles
+          .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))
+          .map((article) => ({ ...article, blocks })),
+        length: page * limit,
+        hasMore:
+          (
+            await this.articleRepo
+              .createQueryBuilder()
+              .leftJoinAndSelect('Article.user', 'user')
+              .leftJoinAndSelect('Article.tags', 'tags')
+              .orderBy(`Article.${sortBy}`, stratagy)
+              .getMany()
+          ).length >
+          page * limit,
+      };
     }
-
-    const result = articles
-      .filter((el) => el.title.toUpperCase().includes(search.toUpperCase()))
-      .map((article) => ({ ...article, blocks }));
-
-    if (result.length > limit) {
-      return { articles: result.slice(0, limit), hasMore: true };
-    }
-
-    return { articles: result, hasMore: false };
-  }
-
-  async getArticleById(id: string) {
-    const article = await this.articleRepo.findOne({ where: { id: id } });
-    return { ...article, blocks };
   }
 }
