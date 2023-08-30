@@ -72,7 +72,7 @@ export class ArticleService {
       limit = 10,
       page = 1,
       sortBy = 'createdAt',
-      stratagy = 'ASC',
+      strategy = 'ASC',
       search = '',
       tags,
     } = params;
@@ -85,7 +85,7 @@ export class ArticleService {
         .leftJoinAndSelect('Article.user', 'user')
         .leftJoinAndSelect('Article.tags', 'tags')
         .where('Article.id IN (:...articlesIDs)', { articlesIDs })
-        .orderBy(`Article.${sortBy}`, stratagy)
+        .orderBy(`Article.${sortBy}`, strategy)
         .take(limit)
         .skip((page - 1) * limit)
         .getMany();
@@ -102,7 +102,7 @@ export class ArticleService {
               .leftJoinAndSelect('Article.user', 'user')
               .leftJoinAndSelect('Article.tags', 'tags')
               .where('Article.id IN (:...articlesIDs)', { articlesIDs })
-              .orderBy(`Article.${sortBy}`, stratagy)
+              .orderBy(`Article.${sortBy}`, strategy)
               .getMany()
           ).length >
           page * limit,
@@ -112,7 +112,7 @@ export class ArticleService {
         .createQueryBuilder()
         .leftJoinAndSelect('Article.user', 'user')
         .leftJoinAndSelect('Article.tags', 'tags')
-        .orderBy(`Article.${sortBy}`, stratagy)
+        .orderBy(`Article.${sortBy}`, strategy)
         .take(limit)
         .skip((page - 1) * limit)
         .getMany();
@@ -128,7 +128,7 @@ export class ArticleService {
               .createQueryBuilder()
               .leftJoinAndSelect('Article.user', 'user')
               .leftJoinAndSelect('Article.tags', 'tags')
-              .orderBy(`Article.${sortBy}`, stratagy)
+              .orderBy(`Article.${sortBy}`, strategy)
               .getMany()
           ).length >
           page * limit,
