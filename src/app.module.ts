@@ -14,7 +14,7 @@ import { Tag } from './tag/entity/tag.model';
   imports: [
     TypeOrmModule.forRoot({
       type: 'postgres',
-      host: 'localhost',
+      host: 'postgres',
       port: 5432,
       username: 'pgql2003',
       password: 'pgql2003',
