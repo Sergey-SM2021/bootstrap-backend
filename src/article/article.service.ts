@@ -46,6 +46,10 @@ export class ArticleService {
     return (await this.articleRepo.find()).length;
   }
 
+  async getTheSameArticles() {
+    return await this.articleRepo.find({ take: 6 });
+  }
+
   private async getArticlesIdsWichHasTags(tagsIds: string) {
     const articlesIds = await this.articleRepo
       .createQueryBuilder()

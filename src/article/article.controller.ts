@@ -16,7 +16,7 @@ import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
 import { PaginationDTO } from './dto/paginationDTO';
 
 @ApiTags('article')
-@Controller('article')
+@Controller('articles')
 export class ArticleController {
   constructor(private articleService: ArticleService) {}
 
@@ -37,5 +37,11 @@ export class ArticleController {
   @Get(':id')
   getArticleById(@Param('id') id: string) {
     return this.articleService.getArticleById(id);
+  }
+
+  @ApiOperation({ summary: 'get same' })
+  @Get('/theSame/:id')
+  async getTheSameArticles() {
+    return await this.articleService.getTheSameArticles();
   }
 }
