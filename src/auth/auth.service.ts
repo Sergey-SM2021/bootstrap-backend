@@ -22,7 +22,7 @@ export class AuthService {
       id: this.jwtService.decode(token)['id'],
       token,
       avatar: avatar,
-      role: 'user',
+      role: 'admin',
     };
   }
 }
