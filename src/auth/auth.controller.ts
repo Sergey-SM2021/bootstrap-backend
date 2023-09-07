@@ -19,8 +19,8 @@ export class AuthController {
   @ApiOperation({ summary: 'login' })
   @UseGuards(LocalAuthGuard)
   @Post('login')
-  login(@Req() req) {
-    return req.user;
+  async login(@Req() req) {
+    return await this.authService.login(req.user);
   }
 
   @ApiOperation({ summary: 'register' })
