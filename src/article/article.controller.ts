@@ -44,4 +44,11 @@ export class ArticleController {
   async getTheSameArticles() {
     return await this.articleService.getTheSameArticles();
   }
+
+  @ApiOperation({ summary: 'rate article' })
+  @Post(':id/rate')
+  async rateTheArticle(@Body() body) {
+    const { rating, message } = body;
+    return { rating, message };
+  }
 }
